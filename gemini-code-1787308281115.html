@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A Special Message For You ✨</title>
+  <style>
+    :root {
+      --primary-color: #ff2a5f;
+      --accent-color: #ff758c;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --text-color: #2b2b2b;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', 'Pyidaungsu', sans-serif;
+    }
+    body {
+      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .floating-bg-item {
+      position: absolute;
+      top: -10%;
+      user-select: none;
+      animation: floatDown 10s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+    }
+    @keyframes floatDown {
+      0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0.1; }
+    }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 100%;
+      max-width: 420px;
+      padding: 30px 28px 40px 28px;
+      border-radius: 30px;
+      box-shadow: 0 30px 60px rgba(255, 42, 95, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.6);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      animation: cardAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .heart-counter-container {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 42, 95, 0.2);
+    }
+    .heart-counter-text {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .heart-icon {
+      font-size: 60px;
+      animation: floatBeat 2.5s infinite ease-in-out;
+      margin-bottom: 15px;
+      display: inline-block;
+      filter: drop-shadow(0 10px 15px rgba(255, 42, 95, 0.3));
+    }
+    h1 {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .story-text {
+      color: var(--text-color);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .step {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .step.exit {
+      opacity: 0;
+      transform: scale(0.85) translateY(-30px);
+    }
+    .step.enter {
+      opacity: 0;
+      transform: scale(1.1) translateY(30px);
+    }
+    .hidden {
+      display: none !important;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      min-height: 80px;
+      margin-top: 15px;
+      position: relative;
+    }
+    .btn {
+      padding: 14px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .btn-yes {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      color: white;
+      box-shadow: 0 10px 25px rgba(255, 42, 95, 0.4);
+    }
+    .btn-no {
+      background: #ffffff;
+      color: #555;
+      border: 1px solid #e0e0e0;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s;
+    }
+    .btn-restart {
+      background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+      color: #2b2b2b;
+      box-shadow: 0 10px 20px rgba(161, 196, 253, 0.4);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 2px solid #ff758c;
+      font-size: 1rem;
+      outline: none;
+      resize: none;
+      background: rgba(255, 255, 255, 0.9);
+      margin-top: 10px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .timer-badge {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      background: #ffe6eb;
+      padding: 8px 18px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 15px;
+      box-shadow: 0 4px 10px rgba(255, 42, 95, 0.15);
+    }
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      animation: fadeIn 0.3s ease-out;
+    }
+    .modal-content {
+      background: #ffffff;
+      padding: 25px 20px;
+      border-radius: 20px;
+      width: 85%;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      border: 2px solid var(--accent-color);
+      text-align: left;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+    .developer-msg-box {
+      font-size: 0.95rem;
+      color: var(--primary-color);
+      line-height: 1.6;
+      margin-top: 10px;
+      min-height: 70px;
+    }
+    @keyframes floatBeat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.08); }
+    }
+    @keyframes cardAppear {
+      from { opacity: 0; transform: scale(0.85) translateY(40px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bg-item" style="left: 8%; animation-duration: 8s; font-size: 1.8rem;">🌸</div>
+  <div class="floating-bg-item" style="left: 30%; animation-duration: 12s; animation-delay: 2s; font-size: 1.4rem;">💖</div>
+  <div class="floating-bg-item" style="left: 60%; animation-duration: 9s; animation-delay: 1s; font-size: 1.6rem;">🌹</div>
+  <div class="floating-bg-item" style="left: 85%; animation-duration: 11s; animation-delay: 3s; font-size: 1.5rem;">✨</div>
+
+  <div class="card">
+    <div class="heart-counter-container">
+      <span>❤️</span>
+      <span class="heart-counter-text" id="heart-count">10</span>
+    </div>
+    <div class="heart-icon" id="main-emoji">✉️</div>
+
+    <!-- Step 1 -->
+    <div id="step1" class="step">
+      <h1>Hey Friend! 👋</h1>
+      <p class="story-text">Are you gay?</p>
+      <div class="btn-group">
+        <button class="btn btn-yes" id="yes-1" onclick="nextStep(1, 2, '🤷‍♂️')">yes</button>
+        <button class="btn btn-no" onclick="handleQ1No()">no</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" class="step hidden enter">
+      <h1>Question 2</h1>
+      <p class="story-text">are you a larper?</p>
+      <div class="btn-group">
+        <button class="btn btn-yes" onclick="nextStep(2, 3, '📝')">yes</button>
+        <button class="btn btn-no" id="no-2" onclick="handleQ2No()" onmouseover="handleQ2No()">no</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step3" class="step hidden enter">
+      <h1>Question 3</h1>
+      <p class="story-text">write everything you want, I can see</p>
+      <textarea id="user-note-q3" placeholder="Write your message here..."></textarea>
+      <div class="btn-group">
+        <button class="btn btn-yes" onclick="submitQ3Note()">Send Message 💌</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div id="step4" class="step hidden enter">
+      <h1>နောက်ဆုံးမေးခွန်း 😅</h1>
+      <p class="story-text">....</p>
+      <div class="btn-group" id="q4-btn-group">
+        <button class="btn btn-no" id="no-4" onclick="handleQ4No()">......</button>
+      </div>
+      <div class="timer-badge" id="timer-badge">Please wait 3s...</div>
+
+      <!-- Developer Modal -->
+      <div id="dev-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeDevNote()">&times;</span>
+          <h4 style="color: var(--primary-color); margin-bottom: 5px;">Note 🙁</h4>
+          <div class="developer-msg-box">
+            <span id="dev-text"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heart Out Modal -->
+    <div id="heart-out-modal" class="modal-overlay hidden">
+      <div class="modal-content" style="text-align: center;">
+        <h3 style="color: var(--primary-color); margin-bottom: 10px;">Out of Hearts! 💔</h3>
+        <p style="font-size: 0.95rem; color: #555; margin-bottom: 15px;">You ran out of hearts! Please wait for 5 minutes to refill 10 hearts.</p>
+        <div class="timer-badge" id="refill-timer">05:00</div>
+      </div>
+    </div>
+
+    <!-- Final Step -->
+    <div id="step-final" class="step hidden enter">
+      <h1>You Made My Day!</h1>
+      <p class="story-text">The end</p>
+      <div class="btn-group">
+        <button class="btn btn-restart" onclick="restartApp()">Play Again 🔄</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let hearts = 10;
+    let yes1Scale = 1;
+    let countdownInterval = null;
+    let isTimerPaused = false;
+    let currentStage = 1;
+    let timeLeft = 3;
+    let typingTimeout = null;
+    const developerText = "...";
+    let textIndex = 0;
+
+    function decreaseHeart() {
+      if (hearts > 0) {
+        hearts--;
+        document.getElementById('heart-count').innerText = hearts;
+        if (hearts === 0) {
+          trigger5MinCooldown();
+        }
+      }
+    }
+
+    function trigger5MinCooldown() {
+      const modal = document.getElementById('heart-out-modal');
+      const timerDisplay = document.getElementById('refill-timer');
+      modal.classList.remove('hidden');
+      let cooldownTime = 300;
+      const cooldownInterval = setInterval(() => {
+        cooldownTime--;
+        let mins = Math.floor(cooldownTime / 60);
+        let secs = cooldownTime % 60;
+        timerDisplay.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        if (cooldownTime <= 0) {
+          clearInterval(cooldownInterval);
+          hearts = 10;
+          document.getElementById('heart-count').innerText = hearts;
+          modal.classList.add('hidden');
+        }
+      }, 1000);
+    }
+
+    function handleQ1No() {
+      if (hearts === 0) return;
+      decreaseHeart();
+      const yesBtn = document.getElementById('yes-1');
+      yes1Scale += 0.3;
+      yesBtn.style.transform = `scale(${yes1Scale})`;
+    }
+
+    function handleQ2No() {
+      if (hearts === 0) return;
+      decreaseHeart();
+      const noBtn = document.getElementById('no-2');
+      noBtn.style.position = 'absolute';
+      const randomX = (Math.random() - 0.5) * 200;
+      const randomY = (Math.random() - 0.5) * 150;
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomX / 10}deg)`;
+    }
+
+    async function submitQ3Note() {
+      const note = document.getElementById('user-note-q3').value;
+      if (note.trim() === "") {
+        alert("write something bro");
+        return;
+      }
+      const telegramBotToken = '8659816319:AAFMvBvpLn0x66VHS5-ZrGqoX41rPdYhwGM';
+      const chatId = '8559434015';
+      const textMessage = `💌 New Friend Note Received!\n\nMessage:\n${note}`;
+      
+      try {
+        await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: textMessage
+          })
+        });
+      } catch (err) {
+        console.error("Telegram API Error:", err);
+      }
+      nextStep(3, 4, '⏳');
+    }
+
+    function startQ4Sequence() {
+      const timerBadge = document.getElementById('timer-badge');
+      timerBadge.style.display = 'inline-block';
+      currentStage = 1;
+      timeLeft = 3;
+      timerBadge.innerText = `Please wait ${timeLeft}s...`;
+
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      countdownInterval = setInterval(() => {
+        if (!isTimerPaused) {
+          timeLeft--;
+          if (currentStage === 1) {
+            timerBadge.innerText = `Please wait ${timeLeft}s...`;
+            if (timeLeft <= 0) { currentStage = 2; timeLeft = 3; }
+          } else if (currentStage === 2) {
+            timerBadge.innerText = `Almost there! Wait ${timeLeft}s more...`;
+            if (timeLeft <= 0) { currentStage = 3; timeLeft = 2; }
+          } else if (currentStage === 3) {
+            timerBadge.innerText = `Just ${timeLeft}s left! ❤️`;
+            if (timeLeft <= 0) {
+              clearInterval(countdownInterval);
+              timerBadge.style.display = 'none';
+              const btnGroup = document.getElementById('q4-btn-group');
+              
+              if (!document.getElementById('yes-4')) {
+                const yesBtn = document.createElement('button');
+                yesBtn.id = 'yes-4';
+                yesBtn.className = 'btn btn-yes';
+                yesBtn.innerText = '... 🙂';
+                yesBtn.onclick = () => nextStep(4, 'final', '🎉');
+                btnGroup.appendChild(yesBtn);
+              }
+            }
+          }
+        }
+      }, 1000);
+    }
+
+    function handleQ4No() {
+      if (hearts === 0) return;
+      decreaseHeart();
+      openDevNote();
+    }
+
+    function openDevNote() {
+      isTimerPaused = true;
+      document.getElementById('dev-modal').classList.remove('hidden');
+      const devTextSpan = document.getElementById('dev-text');
+      devTextSpan.innerText = "";
+      textIndex = 0;
+      
+      function typing() {
+        if (textIndex < developerText.length) {
+          devTextSpan.innerText += developerText.charAt(textIndex);
+          textIndex++;
+          typingTimeout = setTimeout(typing, 35);
+        }
+      }
+      typing();
+    }
+
+    function closeDevNote() {
+      clearTimeout(typingTimeout);
+      document.getElementById('dev-modal').classList.add('hidden');
+      isTimerPaused = false;
+    }
+
+    function nextStep(current, next, emoji) {
+      const currentElement = document.getElementById('step' + current);
+      const nextElement = document.getElementById('step-' + next) || document.getElementById('step' + next);
+      const emojiElement = document.getElementById('main-emoji');
+      
+      currentElement.classList.add('exit');
+      
+      setTimeout(() => {
+        currentElement.classList.add('hidden');
+        currentElement.classList.remove('exit');
+        nextElement.classList.remove('hidden');
+        emojiElement.innerText = emoji;
+        
+        if (next === 4) {
+          startQ4Sequence();
+        }
+        
+        setTimeout(() => {
+          nextElement.classList.remove('enter');
+        }, 50);
+      }, 600);
+    }
+
+    function restartApp() {
+      clearInterval(countdownInterval);
+      clearTimeout(typingTimeout);
+      
+      hearts = 10;
+      yes1Scale = 1;
+      isTimerPaused = false;
+      document.getElementById('heart-count').innerText = hearts;
+      document.getElementById('user-note-q3').value = "";
+      
+      const yes1 = document.getElementById('yes-1');
+      yes1.style.transform = 'scale(1)';
+      
+      const no2 = document.getElementById('no-2');
+      no2.style.position = 'static';
+      no2.style.transform = 'none';
+      
+      const yes4 = document.getElementById('yes-4');
+      if (yes4) yes4.remove();
+      
+      const steps = document.querySelectorAll('.step');
+      steps.forEach(s => {
+        s.classList.add('hidden', 'enter');
+        s.classList.remove('exit');
+      });
+      
+      const step1 = document.getElementById('step1');
+      step1.classList.remove('hidden', 'enter');
+      document.getElementById('main-emoji').innerText = '✉️';
+    }
+  </script>
+</body>
+</html>
